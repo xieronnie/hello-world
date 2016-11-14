@@ -5,8 +5,6 @@
     "version": "0.1",
     "title": "CAP - Controle de Acesso e Permissões",
     "contact": {
-      "name": "Andre",
-      "email": "andre.vilardo@sysmi.com.br"
     }
   },
   "basePath": "/api",
