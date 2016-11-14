@@ -1,0 +1,1173 @@
+// 20161114125047
+// http://cap-gsat-dev.azurewebsites.net/api/swagger.json
+
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Esta aplicação serve para gerenciar o acesso aos recursos(APIs e Aplicações) corporativos da Globosat Programadora.",
+    "version": "0.1",
+    "title": "CAP - Controle de Acesso e Permissões",
+  },
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Domains"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Groups"
+    },
+    {
+      "name": "Hints"
+    },
+    {
+      "name": "Applications"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/applications": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Get all applications",
+        "description": "",
+        "operationId": "getAllApps",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "displayName",
+            "in": "query",
+            "description": "Display Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "description": "Range",
+            "required": false,
+            "type": "string",
+            "default": "0-10"
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/applications/{applicationId}": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Get an application specified by ID",
+        "description": "",
+        "operationId": "getAppication",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "description": "Application ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Application"
+            }
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/applications/{applicationId}/owners": {
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Create an assignment for a role",
+        "description": "",
+        "operationId": "addOwner",
+        "consumes": [
+          "application/json; charset=UTF-8"
+        ],
+        "produces": [
+          "application/json; charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "description": "Application ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource created"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/applications/{applicationId}/roles/{roleId}/assignments": {
+      "get": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Get all assignments for a role",
+        "description": "",
+        "operationId": "getAssignments",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "description": "Application ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Assignment"
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Create an assignment for a role",
+        "description": "",
+        "operationId": "createAssignment",
+        "consumes": [
+          "application/json; charset=UTF-8"
+        ],
+        "produces": [
+          "application/json; charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "description": "Application ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Assignment",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Assignment"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/applications/{applicationId}/roles/{roleId}/assignments/{assignmentId}": {
+      "delete": {
+        "tags": [
+          "Applications"
+        ],
+        "summary": "Delete the specified assignment in a role",
+        "description": "",
+        "operationId": "deleteAssignment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "applicationId",
+            "in": "path",
+            "description": "Application ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "roleId",
+            "in": "path",
+            "description": "Role ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "assignmentId",
+            "in": "path",
+            "description": "Assignment ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/domains": {
+      "get": {
+        "tags": [
+          "Domains"
+        ],
+        "summary": "",
+        "description": "",
+        "operationId": "getDomain",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get all groups",
+        "description": "",
+        "operationId": "getAllGroups",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "displayName",
+            "in": "query",
+            "description": "Display Name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "description": "Range",
+            "required": false,
+            "type": "string",
+            "default": "0-10"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Creates a group.",
+        "description": "",
+        "operationId": "createGroup",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Group",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Group"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource created"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get a group specified by ID",
+        "description": "",
+        "operationId": "getGroup",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Deletes a group.",
+        "description": "",
+        "operationId": "deleteGroup",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}/members": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Get all group members from a specific Group ID",
+        "description": "",
+        "operationId": "getGroupMembers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Sets a user as a group owner.",
+        "description": "",
+        "operationId": "addMember",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}/members/{userId}": {
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Sets a user as a group owner.",
+        "description": "",
+        "operationId": "removeMember",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}/owners": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Sets a user as a group owner.",
+        "description": "",
+        "operationId": "addOwner",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/groups/{groupId}/owners/{userId}": {
+      "delete": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Sets a user as a group owner.",
+        "description": "",
+        "operationId": "removeOwner",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "groupId",
+            "in": "path",
+            "description": "Group ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Resource deleted"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/hints/username": {
+      "get": {
+        "tags": [
+          "Hints"
+        ],
+        "summary": "Get username suggestion based on the user's full name and the company which he/she works for.",
+        "description": "",
+        "operationId": "getUsernameSuggestion",
+        "consumes": [
+          "application/json; charset=UTF-8"
+        ],
+        "produces": [
+          "application/json; charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "firstName",
+            "in": "query",
+            "description": "First Name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "middleName",
+            "in": "query",
+            "description": "Middle Name",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "description": "Last Name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "company",
+            "in": "query",
+            "description": "Company Name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No username suggestion",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users",
+        "description": "",
+        "operationId": "getAllUsers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "displayName",
+            "in": "query",
+            "description": "Display Name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "description": "Range",
+            "required": false,
+            "type": "string",
+            "default": "0-10"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user",
+        "description": "",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json; charset=UTF-8"
+        ],
+        "produces": [
+          "application/json; charset=UTF-8"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Resource created"
+          },
+          "403": {
+            "description": "Insufficient privileges to complete the operation",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "schema": {
+              "$ref": "#/definitions/RestError"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a user specified by ID",
+        "description": "",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Assignment": {
+      "type": "object",
+      "required": [
+        "principalId",
+        "principalType"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "roleId": {
+          "type": "string"
+        },
+        "principalId": {
+          "type": "string"
+        },
+        "principalDisplayName": {
+          "type": "string"
+        },
+        "principalType": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "GROUP",
+            "SERVICEPRINCIPAL"
+          ]
+        }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "Group": {
+      "type": "object",
+      "required": [
+        "displayName"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "owners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "company",
+        "email",
+        "familyName",
+        "givenName"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        }
+      }
+    },
+    "RestError": {
+      "type": "object",
+      "required": [
+        "code",
+        "internalMessage",
+        "userMessage"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "userMessage": {
+          "type": "string"
+        },
+        "internalMessage": {
+          "type": "string"
+        },
+        "moreInfo": {
+          "type": "string"
+        }
+      }
+    },
+    "Application": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Role"
+          }
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "VIEW",
+            "MANAGE"
+          ]
+        }
+      }
+    }
+  }
+}
