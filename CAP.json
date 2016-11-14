@@ -1,3 +1,6 @@
+// 20161114135442
+// http://cap-gsat-dev.azurewebsites.net/api/swagger.json
+
 {
   "swagger": "2.0",
   "info": {
@@ -5,6 +8,8 @@
     "version": "0.1",
     "title": "CAP - Controle de Acesso e Permissões",
     "contact": {
+      "name": "Andre",
+      "email": "andre.vilardo@sysmi.com.br"
     }
   },
   "basePath": "/api",
